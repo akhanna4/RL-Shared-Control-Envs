@@ -65,96 +65,99 @@ def main(args):
     env.unwrapped.viewer.window.on_key_press = key_press
     env.unwrapped.viewer.window.on_key_release = key_release
     global do_user_action, user_action, main_engine, left_right_engine
-    state = env.reset()
-    total_reward = 0
+    for i in range(args.num_episodes):
+        state = env.reset()
+        total_reward = 0
 
-    prev_action = None
-    keypress_cntr = 0.0
+        prev_action = None
+        keypress_cntr = 0.0
 
-    while True:
+        while True:
 
-        my_action = [0.0, 0.0]
-        if do_user_action:
-            
-            # "acceleration" logic
-            # the more number of time steps a key remains pressed, the power of engine is increased
-            if user_action == 0:
-                my_action[0] = 0.0
-                my_action[1] = 0.0
+            my_action = [0.0, 0.0]
+            if do_user_action:
 
-                prev_action = 0
-                keypress_cntr = 0.0
-            
-            elif user_action == 3:
-                my_action[0] = 0.0
-                my_action[1] = 0.5
+                # "acceleration" logic
+                # the more number of time steps a key remains pressed, the power of engine is increased
+                if user_action == 0:
+                    my_action[0] = 0.0
+                    my_action[1] = 0.0
 
-                if prev_action == 3:
-                    keypress_cntr += 0.1
-                
-                else:
-                    prev_action = 3
+                    prev_action = 0
                     keypress_cntr = 0.0
-                
-                my_action[1] += keypress_cntr
 
-                if my_action[1] > 1.0:
-                    my_action[1] = 1.0
+                elif user_action == 3:
+                    my_action[0] = 0.0
+                    my_action[1] = 0.5
 
-            elif user_action == 2:
-                my_action[0] = 0.5
-                my_action[1] = 0.0
+                    if prev_action == 3:
+                        keypress_cntr += 0.1
 
-                if prev_action == 2:
-                    keypress_cntr += 0.1
-                
+                    else:
+                        prev_action = 3
+                        keypress_cntr = 0.0
+
+                    my_action[1] += keypress_cntr
+
+                    if my_action[1] > 1.0:
+                        my_action[1] = 1.0
+
+                elif user_action == 2:
+                    my_action[0] = 0.5
+                    my_action[1] = 0.0
+
+                    if prev_action == 2:
+                        keypress_cntr += 0.1
+
+                    else:
+                        prev_action = 2
+                        keypress_cntr = 0.0
+
+                    my_action[0] += keypress_cntr
+
+                    if my_action[0] > 1.0:
+                        my_action[0] = 1.0
+
+                elif user_action == 1:
+                    my_action[0] = 0.0
+                    my_action[1] = -0.5
+
+                    if prev_action == 1:
+                        keypress_cntr += -0.1
+
+                    else:
+                        prev_action = 1
+                        keypress_cntr = 0.0
+
+                    my_action[1] += keypress_cntr
+
+                    if my_action[1] < -1.0:
+                        my_action[1] = -1.0
+
                 else:
-                    prev_action = 2
+                    my_action[0] = 0.0
+                    my_action[1] = 0.0
+
+                    prev_action = 0
                     keypress_cntr = 0.0
-                
-                my_action[0] += keypress_cntr
 
-                if my_action[0] > 1.0:
-                    my_action[0] = 1.0
+            next_state, reward, done, info = env.step(my_action)
 
-            elif user_action == 1:
-                my_action[0] = 0.0
-                my_action[1] = -0.5
-
-                if prev_action == 1:
-                    keypress_cntr += -0.1
-                
-                else:
-                    prev_action = 1
-                    keypress_cntr = 0.0
-                
-                my_action[1] += keypress_cntr
-
-                if my_action[1] < -1.0:
-                    my_action[1] = -1.0
-
-            else:
-                my_action[0] = 0.0
-                my_action[1] = 0.0
-
-                prev_action = 0
-                keypress_cntr = 0.0
-
-        next_state, reward, done, info = env.step(my_action)
-
-        total_reward += reward
-        env.render()
-        if done:
-            break
-        state = next_state
-        time.sleep(0.05)
+            total_reward += reward
+            env.render()
+            if done:
+                print('Episode', i, ': reward =', total_reward)
+                break
+            state = next_state
+            time.sleep(0.05)
 
     env.close()
 
 
 if __name__ == "__main__":
     parser = ArgumentParser(description='LunarLander-v2 Continuous')
-
+    parser.add_argument('--num_episodes', type=int, default = 2000,
+                        help='number of episodes for training')
     args = parser.parse_args()
     main(args)
 
