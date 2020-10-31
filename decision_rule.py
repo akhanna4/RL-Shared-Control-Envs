@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from agent import Agent
+# from agent import Agent
 
 
 class DecisionRule():
