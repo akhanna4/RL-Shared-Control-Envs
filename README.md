@@ -22,3 +22,5 @@ To run the program:
 python main.py
 ```
 
+The playing mode allows the user to play using keyboard input (using 'w', 'a', 's', and 'd'). 
+
