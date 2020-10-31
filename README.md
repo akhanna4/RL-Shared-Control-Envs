@@ -1,5 +1,5 @@
 # LunarLander-v2 (Continuous)
-Use DDPG to solve the LunarLander environment with a continuous action space.
+Keyboard code for the LunarLander environment with a continuous action space.
 
 ## Installation
 
@@ -22,6 +22,3 @@ To run the program:
 python main.py
 ```
 
-## Implementation
-
-This implementation is from the Youtube channel 'Machine Learning with Phil', in which he goes over a tutorial on how to implement DDPG to solve the continuous variant of the LunarLander environment.
