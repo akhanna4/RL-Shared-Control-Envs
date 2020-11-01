@@ -33,3 +33,6 @@ python main.py
 
 The playing mode allows the user to play using keyboard input (using 'w' and 's'). 
 
+## Notes
+
+Have a max_steps value above 100 since the game starts acting strange when this value drops below 100.
